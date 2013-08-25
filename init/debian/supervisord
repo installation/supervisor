@@ -20,7 +20,6 @@
 . /lib/init/vars.sh
 
 # Define LSB log_* functions.
-# Depend on lsb-base (>= 3.0-6) to ensure that this file is present
 . /lib/lsb/init-functions
 
 
@@ -132,7 +131,7 @@ do_reload()
 do_restart()
 {
 	if running; then
-		echo -n "Restarting $DESC: "
+		log_daemon_msg "Restarting $DESC: "
 		$SUPERVISORCTL $DAEMON_OPTS reload > /dev/null
 		test -f $PIDFILE || sleep 1
 		if running; then
