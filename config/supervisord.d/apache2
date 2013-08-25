@@ -1,0 +1,6 @@
+[program:apache2]
+command=/usr/sbin/apache2 -c "ErrorLog /dev/stdout" -DFOREGROUND
+redirect_stderr=true
+environment=APACHE_RUN_USER=www-data,APACHE_RUN_GROUP=www-data,APACHE_PID_FILE=/var/run$
+autostart=true
+autorestart=true

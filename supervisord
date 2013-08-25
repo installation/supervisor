@@ -1,0 +1,217 @@
+#!/bin/sh
+
+# SUPERVISORD
+# Maintainer: @sagikazarmark
+# App Version: 3.0
+#
+#
+# chkconfig: 2345 85 15
+#
+# description: Start/stop supervisor daemon and its configured subprocesses.
+# processname: supervisord
+# config: /etc/supervisord.conf
+# pidfile: /var/run/supervisord.pid
+#
+#
+### BEGIN INIT INFO
+# Provides:          supervisord
+# Required-Start:    $local_fs $remote_fs $network $named
+# Required-Stop:     $local_fs $remote_fs $network $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop supervisor
+# Description:       Start/stop supervisor daemon and its configured
+#                    subprocesses.
+### END INIT INFO
+
+if [ -f /etc/redhat-release ]; then
+	. /etc/rc.d/init.d/functions
+elif [ -f /etc/debian-release ]; then
+	# Load the VERBOSE setting and other rcS variables
+	. /lib/init/vars.sh
+
+	# Define LSB log_* functions.
+	# Depend on lsb-base (>= 3.0-6) to ensure that this file is present
+	. /lib/lsb/init-functions
+fi
+
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=supervisord
+DESC="Supervisor daemon"
+PIDFILE=/var/run/$NAME.pid
+DODTIME=5
+DAEMON=/usr/bin/$NAME
+DAEMON_OPTS="-c /etc/$NAME.conf"
+SUPERVISORCTL=/usr/bin/supervisorctl
+
+test -x $DAEMON || exit 1
+test -x $SUPERVISORCTL || exit 1
+
+if [ $(id -u) -ne 0 ]; then
+	echo "This script must be run as root"
+	exit 1
+fi
+
+# Include supervisor defaults if available
+if [ -f /etc/default/supervisor ] ; then
+	. /etc/default/supervisor
+fi
+
+
+running_pid()
+{
+	# Check if a given process pid's cmdline matches a given name
+	pid=$1
+	name=$2
+	[ -z "$pid" ] && return 1
+	[ ! -d /proc/$pid ] &&  return 1
+	(cat /proc/$pid/cmdline | tr "\000" "\n"|grep -q $name) || return 1
+	return 0
+}
+
+running()
+{
+# Check if the process is running looking at /proc
+# (works for all users)
+
+	# No pidfile, probably no daemon present
+	[ ! -f "$PIDFILE" ] && return 1
+	# Obtain the pid and check it against the binary name
+	pid=`cat $PIDFILE`
+	running_pid $pid $DAEMON || return 1
+	return 0
+}
+
+status()
+{
+	case "$1" in
+		0 )
+			echo "Success"
+			;;
+		1 )
+			echo "\033[31mError\033[0m"
+			;;
+		2 )
+			echo "Error! $DESC is currently running!"
+			;;
+		3 )
+			echo "Error! $DESC is currently not running!"
+			;;
+		4 )
+			echo "Cannot kill $DESC (pid=$pid)!"
+			;;
+	esac
+}
+
+do_start()
+{
+	if running; then
+		return 2
+	else
+		echo -n "Starting $DESC: "
+		$DAEMON --pidfile $PIDFILE $DAEMON_OPTS > /dev/null
+		test -f $PIDFILE || sleep 1
+		return $(running)
+	fi
+}
+
+do_stop()
+{
+	if running; then
+		echo -n "Stopping $DESC: "
+		$SUPERVISORCTL $DAEMON_OPTS shutdown > /dev/null
+		test -f $PIDFILE || sleep 1
+		if running; then
+			return 1
+		else
+			return 0
+		fi
+	else
+		return 3
+	fi
+}
+
+do_force_stop()
+{
+	if running; then
+		echo -n "Forcefully stopping $DESC: "
+		$SUPERVISORCTL $DAEMON_OPTS shutdown > /dev/null
+		[ -n "$DODTIME" ] && sleep "$DODTIME"s
+		if running; then
+			kill -9 $pid
+			[ -n "$DODTIME" ] && sleep "$DODTIME"s
+			if running; then
+				return 4
+			else
+				rm -f $PIDFILE
+				return 0
+			fi
+		else
+			rm -f $PIDFILE
+			return 0
+		fi
+	else
+		return 3
+	fi
+}
+
+do_reload()
+{
+	if running; then
+		echo -n "Reloading $DESC: "
+		$SUPERVISORCTL $DAEMON_OPTS update > /dev/null
+		return $(running)
+	else
+		return 3
+	fi
+}
+
+do_restart()
+{
+	if running; then
+		echo -n "Restarting $DESC: "
+		$SUPERVISORCTL $DAEMON_OPTS reload > /dev/null
+		test -f $PIDFILE || sleep 1
+		return $(running)
+	else
+		return 3
+	fi
+}
+
+case "$1" in
+	start )
+		do_start
+		status $?
+		;;
+	stop )
+		do_stop
+		status $?
+		;;
+	force-stop )
+		do_force_stop
+		status $?
+		;;
+	reload )
+		do_reload
+		status $?
+		;;
+	restart )
+		do_restart
+		status $?
+		;;
+	status )
+		echo -n "$DESC is "
+		if running; then
+			echo "running"
+		else
+			echo "not running"
+		fi
+		;;
+	*)
+		echo "Usage: service $NAME {start|stop|restart|reload|status|force-stop}" >&2
+		exit 1
+		;;
+esac
+
+exit 0

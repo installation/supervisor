@@ -1,0 +1,5 @@
+[program:beanstalkd]
+command=/usr/bin/beanstalkd
+autostart=true
+autorestart=true
+user=nobody
