@@ -15,6 +15,20 @@ e()
 	echo -e "$color$1\033[0m"
 }
 
+## Find linux distribution
+find_distro()
+{
+if [ -f /etc/lsb-release ]; then
+		DISTRO=$(lsb_release -si | tr '[:upper:]' '[:lower:]')
+elif [ -f /etc/debian_version ]; then
+		DISTRO="debian"
+elif [ -f /etc/redhat-release ]; then
+		DISTRO=$(cat /etc/redhat-release | cut -f 1 -d " " | tr '[:upper:]' '[:lower:]')
+else
+		DISTRO="$(uname -s) $(uname -r)"
+fi
+}
+
 ## Install required packages
 install()
 {
