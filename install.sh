@@ -87,13 +87,11 @@ done
 
 if [ -f /usr/local/bin/supervisord ]; then
 	warning=$(dialog --stdout --backtitle "Installing $NAME $VER" \
-	--title "WARNING" \
-	--radiolist "Warning: $NAME is already installed. Do you want to continue?" 11 40 2 \
-	 1 "Yes" off \
-	 2 "No" on )
+	--title "WARNING" --defaultno \
+	--yesno "Warning: $NAME is already installed. Do you want to continue?" 7 50 )
 
 	case $warning in
-		1 )
+		0 )
 			e "Installing $NAME over the previous version" 31
 			;;
 		* )
