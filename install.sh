@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# # Script to install Supervisord
+# Script to install Supervisord
 # Author: Márk Sági-Kazár (sagikazarmark@gmail.com)
-# This script installs Supervisord on Debian/Ubuntu based distributions.
+# This script installs Supervisord on several Linux distributions.
 #
 # Version: 3.0
 
