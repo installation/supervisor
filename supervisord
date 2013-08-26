@@ -210,7 +210,7 @@ do_stop()
 do_force_stop()
 {
 	if running; then
-		echo -n "Forcefully stopping $DESC: "
+		log_daemon_msg "Forcefully stopping $DESC" "$NAME"
 		$SUPERVISORCTL $DAEMON_OPTS shutdown > /dev/null
 		[ -n "$DODTIME" ] && sleep "$DODTIME"s
 		if running; then
@@ -250,7 +250,7 @@ do_reload()
 do_restart()
 {
 	if running; then
-		log_daemon_msg "Restarting $DESC: "
+		log_daemon_msg "Restarting $DESC" "$NAME"
 		$SUPERVISORCTL $DAEMON_OPTS reload > /dev/null
 		test -f $PIDFILE || sleep 1
 		if running; then
