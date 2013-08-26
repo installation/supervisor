@@ -288,7 +288,7 @@ case "$1" in
 		do_force_stop
 		;;
 	force-reload )
-		restart
+		do_restart
 		;;
 	*)
 		log_daemon_msg "Usage: service $NAME {start|stop|restart|reload|status|force-stop|force-reload}" >&2
