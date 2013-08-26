@@ -48,7 +48,7 @@ progress()
 DIR=$(cd `dirname $0` && pwd)
 NAME="Supervisord"
 VER="3.0"
-DEPENDENCIES=("python" "dialog" "wget")
+DEPENDENCIES=("python" "dialog" "wget" "tar")
 
 # Checking root access
 if [ $EUID -ne 0 ]; then
