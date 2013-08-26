@@ -98,7 +98,8 @@ if [ -f /usr/local/bin/supervisord ]; then
 			;;
 		* )
 			e "Installation aborted"
-			exit 1
+			clear
+			exit 0
 			;;
 	esac
 fi
