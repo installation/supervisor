@@ -26,7 +26,7 @@
 
 
 # LSB functions are available
-if [ -f /etc/lsb-release ]; then
+if [ -f /lib/lsb/init-functions ]; then
 	# Load the VERBOSE setting and other rcS variables
 	. /lib/init/vars.sh
 
