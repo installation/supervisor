@@ -144,10 +144,10 @@ check()
 	else
 		case ${install[2]} in
 			dpkg )
-				${install[3]} -s "$1" > /dev/null
+				${install[3]} -s "$1" &> /dev/null
 				;;
 			rpm )
-				${install[3]} -qa | grep "$1"  > /dev/null
+				${install[3]} -qa | grep "$1"  &> /dev/null
 				;;
 		esac
 		return $?
@@ -208,10 +208,10 @@ cleanup()
 
 # Checking dependencies
 for dep in ${DEPENDENCIES[@]}; do
-	if [ $(check $dep) ]; then
-		install "$dep"
-	fi
+	check "$dep"
+	[ $? -eq 0 ] || install "$dep"
 done
+
 
 if [ -f /usr/local/bin/supervisord -o -f /usr/bin/supervisord ]; then
 	dialog --stdout --backtitle "Installing $NAME $VER" \
