@@ -6,6 +6,16 @@
 #
 # Version: 3.0
 
+# Variable definitions
+DIR=$(cd `dirname $0` && pwd)
+NAME="Supervisor"
+VER="3.0"
+DEPENDENCIES=("python" "dialog" "tar")
+TMP="/tmp/$NAME"
+INSTALL_LOG="$TMP/install.log"
+ERROR_LOG="$TMP/error.log"
+
+
 # Basic function definitions
 
 ## Echo colored text
@@ -14,7 +24,7 @@ e()
 	local color="\033[${2:-34}m"
 	local log="${3:-$INSTALL_LOG}"
 	echo -e "$color$1\033[0m"
-	echo $1 >> $log
+	log $1 $log
 }
 
 ## Exit error
@@ -28,15 +38,12 @@ ee()
 	exit $exit_code
 }
 
+log()
+{
+	local log="${2:-$INSTALL_LOG}"
+	echo $1 >> $log
+}
 
-# Variable definitions
-DIR=$(cd `dirname $0` && pwd)
-NAME="Supervisor"
-VER="3.0"
-DEPENDENCIES=("python" "dialog" "tar")
-TMP="/tmp/$NAME"
-INSTALL_LOG="$TMP/install.log"
-ERROR_LOG="$TMP/error.log"
 
 # Cleaning up
 rm -rf $TMP
