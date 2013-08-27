@@ -38,6 +38,12 @@ TMP="/tmp/$NAME"
 INSTALL_LOG="$TMP/install.log"
 ERROR_LOG="$TMP/error.log"
 
+# Cleaning up
+rm -rf $TMP
+mkdir -p $TMP
+cd $TMP
+chmod 777 $TMP
+
 # Checking root access
 if [ $EUID -ne 0 ]; then
 	ee "This script has to be ran as root!"
@@ -88,11 +94,6 @@ elif [ `which chkconfig 2> /dev/null` ]; then
 else
 	ee "Init system not found, service not started!"
 fi
-
-## Cleaning up
-rm -rf $TMP
-mkdir -p $TMP
-cd $TMP
 
 
 # Function definitions
