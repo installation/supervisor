@@ -9,7 +9,7 @@
 # Variable definitions
 DIR=$(cd `dirname $0` && pwd)
 NAME="Supervisor"
-$SLUG="supervisor"
+SLUG="supervisor"
 VER="3.0"
 DEPENDENCIES=("python" "dialog" "tar")
 TMP="/tmp/$SLUG"
