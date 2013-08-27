@@ -170,11 +170,11 @@ config=$(dialog --stdout --backtitle "Installing $NAME $VER" \
 --radiolist "Choose configuration" 11 40 3 \
  1 "Default config" off \
  2 "Predefined config" on \
- 3 "Open editor" off)
+ 3 "Open editor" off )
 
 progress 15 "Downloading files"
-download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz
 download https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz
+download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz
 
 progress 30 "Extracting files"
 tar -xvzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
