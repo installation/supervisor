@@ -30,6 +30,10 @@ There are two ways to install supervisord: online and offline
 
 Clone this repository and run ````install.sh````
 
+OR
+
+Just download ````install.sh```` and run it.
+
 ### Offline installation
 
 Clone this repository and download the following files manually into the install path:
