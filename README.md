@@ -49,4 +49,6 @@ Clone this repository and download the following files manually into the install
 
 [Supervisor 3.0](https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz)
 
+Run ````install.sh````
+
 This way you can install Supervisor on any machine even without internet connection. Make sure that every dependency is installed.
