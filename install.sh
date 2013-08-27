@@ -117,6 +117,18 @@ download()
 	return 0
 }
 
+init()
+{
+	if [ -z "$1" ]; then
+		e "No init script given" 31
+		return 1
+	else
+		$init "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during init"
+	fi
+
+	return 0
+}
+
 ## Show progressbar
 progress()
 {
@@ -188,7 +200,7 @@ case $config in
 		if [ -f $DIR/config/supervisord.conf ]; then
 			cp -r $DIR/config/supervisord.conf /etc/
 		else
-			download http://github.com
+			download https://raw.github.com/sagikazarmark/server/ba3dafdfe1f61f2477ef8c961aa961101cee39a1/supervisord/config/supervisord.conf
 			mv supervisord.conf /etc/
 		fi
 		;;
@@ -215,7 +227,7 @@ clear
 if [ -f $DIR/supervisord ]; then
 	cp -r $DIR/supervisord /etc/init.d/supervisord
 else
-	download http://github.com
+	download https://raw.github.com/sagikazarmark/server/ba3dafdfe1f61f2477ef8c961aa961101cee39a1/supervisord/supervisord
 	mv supervisord /etc/init.d/supervisord
 fi
 chmod +x /etc/init.d/supervisord
