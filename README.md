@@ -22,6 +22,15 @@ Default temp dir is ````/tmp/Supervisor````, this can be changed in install scri
 
 By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.log````. Check these for further info about the installation process.
 
+## Dependencies
+* Package manager (apt or yum)
+* HTTP Client (curl, wget or fetch)
+* TAR executable
+* Python
+* Bash Dialog
+
+Dependencies will be installed during the progress, but installing them on your own is advised.
+
 ## Installation
 
 There are two ways to install Supervisor: online and offline
