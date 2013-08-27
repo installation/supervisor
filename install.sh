@@ -220,7 +220,7 @@ case $config in
 		if [ -f $DIR/config/supervisord.conf ]; then
 			cp -r $DIR/config/supervisord.conf /etc/
 		else
-			download https://raw.github.com/sagikazarmark/server/ba3dafdfe1f61f2477ef8c961aa961101cee39a1/supervisord/config/supervisord.conf "Supervisor config"
+			download https://raw.github.com/sagikazarmark/supervisor/a996cbfc8394f280b33177d748e6a5b1070e8c4e/config/supervisord.conf "Supervisor config"
 			mv supervisord.conf /etc/
 		fi
 		;;
@@ -247,7 +247,7 @@ clear
 if [ -f $DIR/supervisord ]; then
 	cp -r $DIR/supervisord /etc/init.d/supervisord
 else
-	download https://raw.github.com/sagikazarmark/server/ba3dafdfe1f61f2477ef8c961aa961101cee39a1/supervisord/supervisord "Supervisor init script"
+	download https://raw.github.com/sagikazarmark/supervisor/a996cbfc8394f280b33177d748e6a5b1070e8c4e/supervisord "Supervisor init script"
 	mv supervisord /etc/init.d/supervisord
 fi
 chmod +x /etc/init.d/supervisord
