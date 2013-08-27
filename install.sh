@@ -128,7 +128,7 @@ install()
 		return 1
 	else
 		e "Installing package: $1"
-		$install "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during install $1"
+		${install[1]} "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during install $1"
 		e "Package $1 successfully installed"
 	fi
 
