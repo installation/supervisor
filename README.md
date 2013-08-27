@@ -1,7 +1,7 @@
-Supervisor install & init script
-================================
+Supervisor
+==========
 
-Install supervisor on several Linux distributions with one script
+Supervisor install script
 
 * Installs all dependencies using apt or yum
 * Creates init script which is also distro-independent
@@ -10,7 +10,7 @@ Install supervisor on several Linux distributions with one script
 
 Note: Always change the configuration, even the predefined one. If you use the web interface, remember to setup a password and check the port number.
 
-Some program configuration are also included.
+Some program configurations are also included.
 
 Tested on:
 * CentOS 5.8/6.4

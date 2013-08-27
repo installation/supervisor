@@ -202,7 +202,8 @@ progress()
 ## Cleanup files
 cleanup()
 {
-	find $TMP/* -not -name '*.log' | xargs rm -rf
+	cd $TMP 2> /dev/null || return 1
+	find * -not -name '*.log' | xargs rm -rf
 }
 
 
@@ -290,7 +291,7 @@ mkdir -p /etc/supervisord.d
 [ -f /usr/bin/supervisorctl ] || ln -s /usr/local/bin/supervisorctl /usr/bin/supervisorctl
 [ -f /usr/bin/pidproxy ] || ln -s /usr/local/bin/pidproxy /usr/bin/pidproxy
 
-progress 90 "Deleting setup files"
+progress 90 "Cleaning up"
 cleanup
 
 clear
