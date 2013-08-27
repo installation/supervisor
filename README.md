@@ -24,7 +24,7 @@ By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.
 
 ## Installation
 
-There are two ways to install supervisord: online and offline
+There are two ways to install Supervisor: online and offline
 
 ### Online installation
 
