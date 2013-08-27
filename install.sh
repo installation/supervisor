@@ -16,6 +16,12 @@ TMP="/tmp/$SLUG"
 INSTALL_LOG="$TMP/install.log"
 ERROR_LOG="$TMP/error.log"
 
+# Cleaning up
+rm -rf $TMP
+mkdir -p $TMP
+cd $TMP
+chmod 777 $TMP
+
 
 # Basic function definitions
 
@@ -46,12 +52,6 @@ log()
 	echo $1 >> $log
 }
 
-
-# Cleaning up
-rm -rf $TMP
-mkdir -p $TMP
-cd $TMP
-chmod 777 $TMP
 
 # Checking root access
 if [ $EUID -ne 0 ]; then
