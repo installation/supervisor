@@ -31,7 +31,7 @@ e()
 	local color="\033[${2:-34}m"
 	local log="${3:-$INSTALL_LOG}"
 	echo -e "$color$1\033[0m"
-	log $1 $log
+	log "$1" "$log"
 }
 
 ## Exit error
@@ -41,7 +41,7 @@ ee()
 	local color="${3:-31}"
 
 	clear
-	e "$1" "$color" $ERROR_LOG
+	e "$1" "$color" "$ERROR_LOG"
 	exit $exit_code
 }
 
@@ -49,7 +49,7 @@ ee()
 log()
 {
 	local log="${2:-$INSTALL_LOG}"
-	echo $1 >> $log
+	echo "$1" >> "$log"
 }
 
 
