@@ -98,11 +98,11 @@ fi
 
 ## Check for package manager (dpkg or rpm)
 if [ `which dpkg 2> /dev/null` ]; then
-	install[3]="dpkg"
-	install[4]="$(which dpkg)"
+	install[2]="dpkg"
+	install[3]="$(which dpkg)"
 elif [ `which rpm 2> /dev/null` ]; then
-	install[3]="rpm"
-	install[4]="$(which rpm)"
+	install[2]="rpm"
+	install[3]="$(which rpm)"
 else
 	ee "No package manager found."
 fi
