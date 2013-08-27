@@ -1,3 +1,6 @@
 [submodule "dist/supervisor"]
 	path = dist/supervisor
 	url = https://github.com/Supervisor/supervisor.git
+[submodule "dist/setuptools"]
+	path = dist/setuptools
+	url = https://github.com/jaraco/setuptools.git
