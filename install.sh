@@ -151,11 +151,10 @@ for dep in ${DEPENDENCIES[@]}; do
 done
 
 if [ -f /usr/local/bin/supervisord ]; then
-	warning=$(dialog --stdout --backtitle "Installing $NAME $VER" \
+	dialog --stdout --backtitle "Installing $NAME $VER" \
 	--title "WARNING" --defaultno \
-	--yesno "Warning: $NAME is already installed. Do you want to continue?" 7 50 )
-
-	case $warning in
+	--yesno "Warning: $NAME is already installed. Do you want to continue?" 7 50
+	case $? in
 		0 )
 			e "Installing $NAME over the previous version" 31
 			;;
@@ -174,14 +173,14 @@ config=$(dialog --stdout --backtitle "Installing $NAME $VER" \
  3 "Open editor" off )
 
 # Setuptools
-if [ -x $DIR/dist/setuptools/setup.py ]; then
+if [ -f $DIR/dist/setuptools/setup.py ]; then
 	progress 30 "Installing Setuptools"
 	cd $DIR/dist/setuptools/
 	python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing Setuptools"
 else
 	progress 10 "Downloading Setuptools"
 	cd $TMP
-	if [ -x $DIR/setuptools-1.0.tar.gz ]; then
+	if [ -f $DIR/setuptools-1.0.tar.gz ]; then
 		cp -r $DIR/setuptools-1.0.tar.gz $TMP
 	else
 		download https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz "Setuptools"
@@ -194,14 +193,14 @@ else
 fi
 
 # Supervisor
-if [ -x $DIR/dist/supervisor/setup.py ]; then
+if [ -f $DIR/dist/supervisor/setup.py ]; then
 	progress 60 "Installing $NAME $VER"
 	cd $DIR/dist/supervisor/
 	python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing $NAME $VER"
 else
 	progress 40 "Downloading $NAME $VER"
 	cd $TMP
-	if [ -x $DIR/supervisor-3.0.tar.gz ]; then
+	if [ -f $DIR/supervisor-3.0.tar.gz ]; then
 		cp -r $DIR/supervisor-3.0.tar.gz $TMP
 	else
 		download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz "$NAME $VER"
