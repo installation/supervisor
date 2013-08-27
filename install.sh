@@ -87,9 +87,22 @@ fi
 ## Check for package manager (apt or yum)
 e "Checking for package manager..."
 if [ `which apt-get 2> /dev/null` ]; then
-	install="$(which apt-get) -y --force-yes install"
+	install[0]="apt"
+	install[1]="$(which apt-get) -y --force-yes install"
 elif [ `which yum 2> /dev/null` ]; then
-	install="$(which yum) -y install"
+	install[0]="yum"
+	install[1]="$(which yum) -y install"
+else
+	ee "No package manager found."
+fi
+
+## Check for package manager (dpkg or rpm)
+if [ `which dpkg 2> /dev/null` ]; then
+	install[3]="dpkg"
+	install[4]="$(which dpkg)"
+elif [ `which rpm 2> /dev/null` ]; then
+	install[3]="rpm"
+	install[4]="$(which rpm)"
 else
 	ee "No package manager found."
 fi
@@ -120,6 +133,33 @@ install()
 	fi
 
 	return 0
+}
+
+## Check installed package
+check()
+{
+	if [ -z "$1" ]; then
+		e "Package not given" 31
+		return 2
+	else
+		case ${install[2]} in
+			dpkg )
+				${install[3]} -s "$1" > /dev/null
+				;;
+			rpm )
+				${install[3]} -qa | grep "$1"  > /dev/null
+				;;
+		esac
+		return $?
+	fi
+}
+
+## Add dependency
+dep()
+{
+	if [ ! -z "$1" ]; then
+		DEPENDENCIES+=("$1")
+	fi
 }
 
 ## Download required file
@@ -162,13 +202,13 @@ progress()
 ## Cleanup files
 cleanup()
 {
-	rm -rf $TMP/supervisor* $TMP/setuptools*
+	find $TMP/* -not -name '*.log' | xargs rm -rf
 }
 
 
 # Checking dependencies
 for dep in ${DEPENDENCIES[@]}; do
-	if [ ! $(which $dep 2> /dev/null) ]; then
+	if [ $(check $dep) ]; then
 		install "$dep"
 	fi
 done
