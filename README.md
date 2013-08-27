@@ -8,7 +8,7 @@ Install supervisor on several Linux distributions with one script
 * Runs update-rc or chkconfig
 * Creates config of your choice (default, predefined, open up editor)
 
-Note: Always change the configuration, even the predefined one. If you use the webinterface, remember to setup a password and check the port number.
+Note: Always change the configuration, even the predefined one. If you use the web interface, remember to setup a password and check the port number.
 
 Some program configuration are also included.
 
@@ -24,7 +24,7 @@ By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.
 
 ## Dependencies
 * Package manager (apt or yum)
-* HTTP Client (curl, wget or fetch)
+* HTTP Client (curl, wget or fetch) (only for internet install)
 * TAR executable
 * Python
 * Bash Dialog
@@ -32,8 +32,6 @@ By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.
 Dependencies will be installed during the progress, but installing them on your own is advised.
 
 ## Installation
-
-There are two ways to install Supervisor: online and offline
 
 ### Online installation
 
@@ -45,8 +43,10 @@ Just download ````install.sh```` and run it.
 
 ### Offline installation
 
-Clone this repository and download the following files manually into the install path:
+Clone this repository and download the following files manually into the install script path:
 
 [Setuptools 1.0](https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz)
 
 [Supervisor 3.0](https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz)
+
+This way you can install Supervisor on any machine even without internet connection. Make sure that every dependency is installed.
