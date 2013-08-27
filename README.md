@@ -26,8 +26,12 @@ By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.
 
 There are two ways to install supervisord: online and offline
 
-Note: supervisor and setuptools are NOT included in this repository, so if you want to install supervisor offline, you have to download these files manually to either in the temp dir or the dir of the install script or clone this repository with ````--recursive```` option.
-
 ### Online installation
 
 Clone this repository and run ````install.sh````
+
+### Offline installation
+
+Clone this repository with ````--recursive```` option or download the following files manually into the install path:
+[Setuptools 1.0](https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz)
+[Supervisor 3.0](https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz)

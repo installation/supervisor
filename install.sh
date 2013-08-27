@@ -150,7 +150,7 @@ for dep in ${DEPENDENCIES[@]}; do
 	fi
 done
 
-if [ -f /usr/local/bin/supervisord ]; then
+if [ -f /usr/local/bin/supervisord -o -f /usr/bin/supervisord ]; then
 	dialog --stdout --backtitle "Installing $NAME $VER" \
 	--title "WARNING" --defaultno \
 	--yesno "Warning: $NAME is already installed. Do you want to continue?" 7 50
@@ -252,5 +252,9 @@ else
 fi
 chmod +x /etc/init.d/supervisord
 
-service supervisord stop
-service supervisord start
+service supervisord stop 2>> $ERROR_LOG
+service supervisord start 2>> $ERROR_LOG
+
+if [ -s $ERROR_LOG ]; then
+	e "Error log is not empty. Please check $ERROR_LOG for further details."
+fi
