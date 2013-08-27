@@ -12,7 +12,9 @@
 e()
 {
 	local color="\033[${2:-34}m"
+	local log="${3:-$INSTALL_LOG}"
 	echo -e "$color$1\033[0m"
+	echo $1 >> $log
 }
 
 ## Exit error
@@ -22,14 +24,10 @@ ee()
 	local color="${3:-31}"
 
 	clear
-	e "$1" "$color"
+	e "$1" "$color" $ERROR_LOG
 	exit $exit_code
 }
 
-# Checking root access
-if [ $EUID -ne 0 ]; then
-	ee "This script has to be ran as root!"
-fi
 
 # Variable definitions
 DIR=$(cd `dirname $0` && pwd)
@@ -39,6 +37,11 @@ DEPENDENCIES=("python" "dialog" "tar")
 TMP="/tmp/$NAME"
 INSTALL_LOG="$TMP/install.log"
 ERROR_LOG="$TMP/error.log"
+
+# Checking root access
+if [ $EUID -ne 0 ]; then
+	ee "This script has to be ran as root!"
+fi
 
 # CTRL_C trap
 ctrl_c()
@@ -91,6 +94,7 @@ rm -rf $TMP
 mkdir -p $TMP
 cd $TMP
 
+
 # Function definitions
 
 ## Install required packages
@@ -108,6 +112,7 @@ install()
 	return 0
 }
 
+## Download required file
 download()
 {
 	if [ -z "$1" ]; then
@@ -120,6 +125,7 @@ download()
 	return 0
 }
 
+## Install init script
 init()
 {
 	if [ -z "$1" ]; then
@@ -148,6 +154,7 @@ cleanup()
 {
 	rm -rf $TMP/supervisor* $TMP/setuptools*
 }
+
 
 # Checking dependencies
 for dep in ${DEPENDENCIES[@]}; do
@@ -250,5 +257,7 @@ service supervisord stop 2>> $ERROR_LOG
 service supervisord start 2>> $ERROR_LOG
 
 if [ -s $ERROR_LOG ]; then
-	e "Error log is not empty. Please check $ERROR_LOG for further details."
+	e "Error log is not empty. Please check $ERROR_LOG for further details." 31
 fi
+
+e "Installation done."
