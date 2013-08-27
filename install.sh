@@ -85,8 +85,10 @@ else
 	ee "Init system not found, service not started!"
 fi
 
-## Clearing logs
-rm -rf $INSTALL_LOG $ERROR_LOG
+## Cleaning up
+rm -rf $TMP
+mkdir -p $TMP
+cd $TMP
 
 # Function definitions
 
@@ -170,31 +172,25 @@ config=$(dialog --stdout --backtitle "Installing $NAME $VER" \
  2 "Predefined config" on \
  3 "Open editor" off)
 
-mkdir -p $TMP
-cd $TMP
-
-progress 15 "Cleaning up"
-rm -rf *
-
-progress 30 "Downloading files"
+progress 15 "Downloading files"
 download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz
 download https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz
 
-progress 45 "Extracting files"
+progress 30 "Extracting files"
 tar -xvzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
 tar -xvzf setuptools-1.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
 
-progress 60 "Installing Setuptools"
+progress 45 "Installing Setuptools"
 cd setuptools-1.0
 python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG
 
-progress 75 "Installing $NAME $VER"
+progress 60 "Installing $NAME $VER"
 cd ../supervisor-3.0
 python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG
 
 cd $TMP
 
-progress 90 "Setting up $NAME $VER"
+progress 75 "Setting up $NAME $VER"
 case $config in
 	2 )
 		if [ -f $DIR/config/supervisord.conf ]; then
