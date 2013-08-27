@@ -33,5 +33,7 @@ Clone this repository and run ````install.sh````
 ### Offline installation
 
 Clone this repository and download the following files manually into the install path:
+
 [Setuptools 1.0](https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz)
+
 [Supervisor 3.0](https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz)
