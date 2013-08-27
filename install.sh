@@ -173,44 +173,32 @@ config=$(dialog --stdout --backtitle "Installing $NAME $VER" \
  3 "Open editor" off )
 
 # Setuptools
-if [ -f $DIR/dist/setuptools/setup.py ]; then
-	progress 30 "Installing Setuptools"
-	cd $DIR/dist/setuptools/
-	python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing Setuptools"
+progress 10 "Downloading Setuptools"
+cd $TMP
+if [ -f $DIR/setuptools-1.0.tar.gz ]; then
+	cp -r $DIR/setuptools-1.0.tar.gz $TMP
 else
-	progress 10 "Downloading Setuptools"
-	cd $TMP
-	if [ -f $DIR/setuptools-1.0.tar.gz ]; then
-		cp -r $DIR/setuptools-1.0.tar.gz $TMP
-	else
-		download https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz "Setuptools"
-	fi
-	progress 20 "Extracting Setuptools"
-	tar -xvzf setuptools-1.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
-	progress 30 "Installing Setuptools"
-	cd setuptools-1.0
-	python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing Setuptools"
+	download https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz "Setuptools"
 fi
+progress 20 "Extracting Setuptools"
+tar -xvzf setuptools-1.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
+progress 30 "Installing Setuptools"
+cd setuptools-1.0
+python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing Setuptools"
 
 # Supervisor
-if [ -f $DIR/dist/supervisor/setup.py ]; then
-	progress 60 "Installing $NAME $VER"
-	cd $DIR/dist/supervisor/
-	python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing $NAME $VER"
+progress 40 "Downloading $NAME $VER"
+cd $TMP
+if [ -f $DIR/supervisor-3.0.tar.gz ]; then
+	cp -r $DIR/supervisor-3.0.tar.gz $TMP
 else
-	progress 40 "Downloading $NAME $VER"
-	cd $TMP
-	if [ -f $DIR/supervisor-3.0.tar.gz ]; then
-		cp -r $DIR/supervisor-3.0.tar.gz $TMP
-	else
-		download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz "$NAME $VER"
-	fi
-	progress 50 "Extracting $NAME $VER"
-	tar -xvzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
-	progress 60 "Installing $NAME $VER"
-	cd supervisor-3.0
-	python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing $NAME $VER"
+	download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz "$NAME $VER"
 fi
+progress 50 "Extracting $NAME $VER"
+tar -xvzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
+progress 60 "Installing $NAME $VER"
+cd supervisor-3.0
+python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing $NAME $VER"
 
 cd $TMP
 
