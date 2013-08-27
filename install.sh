@@ -46,7 +46,7 @@ ctrl_c()
 	clear
 	echo
 	echo "Installation aborted by user!"
-	rm -rf $TMP/supervisor* $TMP/setuptools*
+	cleanup
 }
 trap ctrl_c INT
 
@@ -143,6 +143,12 @@ progress()
 	 --title "$title" --gauge "$gauge" 7 70 0
 }
 
+## Cleanup files
+cleanup()
+{
+	rm -rf $TMP/supervisor* $TMP/setuptools*
+}
+
 # Checking dependencies
 for dep in ${DEPENDENCIES[@]}; do
 	if [ ! $(which $dep 2> /dev/null) ]; then
@@ -228,7 +234,7 @@ mkdir -p /etc/supervisord.d
 [ -f /usr/bin/pidproxy ] || ln -s /usr/local/bin/pidproxy /usr/bin/pidproxy
 
 progress 90 "Deleting setup files"
-rm -rf setuptools* supervisor*
+cleanup
 
 clear
 
