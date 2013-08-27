@@ -38,6 +38,7 @@ ee()
 	exit $exit_code
 }
 
+## Log messages
 log()
 {
 	local log="${2:-$INSTALL_LOG}"
