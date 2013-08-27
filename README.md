@@ -18,7 +18,7 @@ Tested on:
 * Fedora 17
 * Ubuntu 10.04/12.04/12.10/13.04
 
-Default temp dir is ````/tmp/Supervisord````, this can be changed in install script.
+Default temp dir is ````/tmp/Supervisor````, this can be changed in install script.
 
 By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.log````. Check these for further info about the installation process.
 

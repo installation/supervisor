@@ -32,7 +32,7 @@ fi
 
 # Variable definitions
 DIR=$(cd `dirname $0` && pwd)
-NAME="Supervisord"
+NAME="Supervisor"
 VER="3.0"
 DEPENDENCIES=("python" "dialog" "tar")
 TMP="/tmp/$NAME"
