@@ -64,7 +64,7 @@ trap ctrl_c INT
 ## Check for wget or curl or fetch
 e "Checking for HTTP client..."
 if [ `which curl 2> /dev/null` ]; then
-	download="$(which curl) -O"
+	download="$(which curl) -s -O"
 elif [ `which wget 2> /dev/null` ]; then
 	download="$(which wget) --no-certificate"
 elif [ `which fetch 2> /dev/null` ]; then
