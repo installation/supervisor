@@ -1,0 +1,3 @@
+[submodule "dist/supervisor"]
+	path = dist/supervisor
+	url = https://github.com/Supervisor/supervisor.git
