@@ -132,11 +132,11 @@ fi
 install()
 {
 	if [ -z "$1" ]; then
-		e "Package not given" 31
+		e "No package passed" 31
 		return 1
 	else
 		e "Installing package: $1"
-		${install[1]} "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during install $1"
+		${install[1]} "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Installing $1 failed"
 		e "Package $1 successfully installed"
 	fi
 
@@ -147,7 +147,7 @@ install()
 check()
 {
 	if [ -z "$1" ]; then
-		e "Package not given" 31
+		e "No package passed" 31
 		return 2
 	else
 		case ${install[2]} in
@@ -166,10 +166,10 @@ check()
 download()
 {
 	if [ -z "$1" ]; then
-		e "No download given" 31
+		e "No download passed" 31
 		return 1
 	else
-		$download "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during download $2"
+		$download "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Downloading $2 failed"
 	fi
 
 	return 0
@@ -262,7 +262,7 @@ progress 50 "Extracting $NAME $VER"
 tar -xvzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
 progress 60 "Installing $NAME $VER"
 cd supervisor-3.0
-python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing $NAME $VER"
+python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Installing $NAME $VER failed"
 
 cd $TMP
 
