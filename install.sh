@@ -169,7 +169,10 @@ download()
 		e "No download passed" 31
 		return 1
 	else
-		$download "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Downloading $2 failed"
+		local text="${2:-files}"
+		e "Downloading $text"
+		$download "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Downloading $text failed"
+		e "Downloading $text successfull"
 	fi
 
 	return 0
