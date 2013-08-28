@@ -24,7 +24,7 @@ By default, the installer logs into ````$TMP/install.log```` and ````$TMP/error.
 
 ## Dependencies
 * Package manager (apt or yum)
-* HTTP Client (curl, wget or fetch) (only for internet install)
+* HTTP Client (curl, wget or fetch)
 * TAR executable
 * Python
 * Bash Dialog
