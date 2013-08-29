@@ -23,7 +23,7 @@ cd $TMP
 chmod 777 $TMP
 
 
-# Basic function definitions
+# Function definitions
 
 ## Echo colored text
 e()
@@ -40,7 +40,8 @@ ee()
 	local exit_code="${2:-1}"
 	local color="${3:-31}"
 
-	clear
+	has_dep "dialog"
+	[ $? -eq 0 ] && clear
 	e "$1" "$color" "$ERROR_LOG"
 	exit $exit_code
 }
@@ -52,31 +53,99 @@ log()
 	echo "$1" >> "$log"
 }
 
+## Install required packages
+install()
+{
+	[ -z "$1" ] && { e "No package passed" 31; return 1; }
+
+	e "Installing package: $1"
+	${install[1]} "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Installing $1 failed"
+	e "Package $1 successfully installed"
+
+	return 0
+}
+
+## Check installed package
+check()
+{
+	[ -z "$1" ] && { e "No package passed" 31; return 2; }
+
+	case ${install[2]} in
+		dpkg )
+			${install[3]} -s "$1" &> /dev/null
+			;;
+		rpm )
+			${install[3]} -qa | grep "$1"  &> /dev/null
+			;;
+	esac
+	return $?
+}
+
 ## Add dependency
 dep()
 {
-	if [ ! -z "$1" ]; then
+	has_dep "$1"
+	if [ ! -z "$1" -a $? -eq 0 ]; then
 		DEPENDENCIES+=("$1")
+		return 0
 	fi
+	return 1
 }
 
+## Dependency is added or not
+has_dep()
+{
+	for dep in ${DEPENDENCIES[@]}; do [ "$dep" == "$1" ] && return 0; done
+	return 1
+}
 
-# Checking root access
-if [ $EUID -ne 0 ]; then
-	ee "This script has to be ran as root!"
-fi
+## Download required file
+download()
+{
+	[ -z "$1" ] && { e "No package passed" 31; return 1; }
+
+	local text="${2:-files}"
+	e "Downloading $text"
+	$download "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Downloading $text failed"
+	e "Downloading $text finished"
+	return 0
+}
+
+## Install init script
+init()
+{
+	[ -z "$1" ] && { e "No init script passed" 31; return 1; }
+
+	$init "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during init"
+	return 0
+}
+
+## Cleanup
+cleanup()
+{
+	has_dep "dialog"
+	[ $? -eq 0 ] && clear
+	e "Cleaning up"
+	cd $TMP 2> /dev/null || return 1
+	find * -not -name '*.log' | xargs rm -rf
+}
 
 # CTRL_C trap
 ctrl_c()
 {
-	clear
 	echo
-	echo "Installation aborted by user!"
 	cleanup
+	e "Installation aborted by user!" 31
 }
 trap ctrl_c INT
 
+
 # Basic checks
+
+## Checking root access
+if [ $EUID -ne 0 ]; then
+	ee "This script has to be ran as root!"
+fi
 
 ## Check for wget or curl or fetch
 e "Checking for HTTP client..."
@@ -126,56 +195,7 @@ else
 fi
 
 
-# Function definitions
-
-## Install required packages
-install()
-{
-	[ -z "$1" ] && { e "No package passed" 31; return 1; }
-
-	e "Installing package: $1"
-	${install[1]} "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Installing $1 failed"
-	e "Package $1 successfully installed"
-
-	return 0
-}
-
-## Check installed package
-check()
-{
-	[ -z "$1" ] && { e "No package passed" 31; return 2; }
-
-	case ${install[2]} in
-		dpkg )
-			${install[3]} -s "$1" &> /dev/null
-			;;
-		rpm )
-			${install[3]} -qa | grep "$1"  &> /dev/null
-			;;
-	esac
-	return $?
-}
-
-## Download required file
-download()
-{
-	[ -z "$1" ] && { e "No package passed" 31; return 1; }
-
-	local text="${2:-files}"
-	e "Downloading $text"
-	$download "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Downloading $text failed"
-	e "Downloading $text finished"
-	return 0
-}
-
-## Install init script
-init()
-{
-	[ -z "$1" ] && { e "No init script passed" 31; return 1; }
-
-	$init "$1" >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error during init"
-	return 0
-}
+# Dialog specific function
 
 ## Show progressbar
 progress()
@@ -186,13 +206,6 @@ progress()
 
 	echo $progress | dialog --backtitle "Installing $NAME $VER" \
 	 --title "$title" --gauge "$gauge" 7 70 0
-}
-
-## Cleanup files
-cleanup()
-{
-	cd $TMP 2> /dev/null || return 1
-	find * -not -name '*.log' | xargs rm -rf
 }
 
 
@@ -282,8 +295,6 @@ mkdir -p /etc/supervisord.d
 
 progress 90 "Cleaning up"
 cleanup
-
-clear
 
 if [ -f $DIR/supervisord ]; then
 	cp -r $DIR/supervisord /etc/init.d/supervisord
