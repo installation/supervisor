@@ -99,6 +99,15 @@ has_dep()
 	return 1
 }
 
+## Install dependencies
+install_deps()
+{
+	for dep in ${DEPENDENCIES[@]}; do
+		check "$dep"
+		[ $? -eq 0 ] || install "$dep"
+	done
+}
+
 ## Download required file
 download()
 {
@@ -209,11 +218,7 @@ progress()
 }
 
 
-# Checking dependencies
-for dep in ${DEPENDENCIES[@]}; do
-	check "$dep"
-	[ $? -eq 0 ] || install "$dep"
-done
+install_deps
 
 
 if [ -f /usr/local/bin/supervisord -o -f /usr/bin/supervisord ]; then
