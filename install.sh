@@ -234,7 +234,7 @@ else
 	download https://pypi.python.org/packages/source/s/setuptools/setuptools-1.0.tar.gz "Setuptools"
 fi
 progress 20 "Extracting Setuptools"
-tar -xvzf setuptools-1.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
+tar -xzf setuptools-1.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
 progress 30 "Installing Setuptools"
 cd setuptools-1.0
 python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Error installing Setuptools"
@@ -248,7 +248,7 @@ else
 	download https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0.tar.gz "$NAME $VER"
 fi
 progress 50 "Extracting $NAME $VER"
-tar -xvzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
+tar -xzf supervisor-3.0.tar.gz >> $INSTALL_LOG 2>> $ERROR_LOG
 progress 60 "Installing $NAME $VER"
 cd supervisor-3.0
 python setup.py install >> $INSTALL_LOG 2>> $ERROR_LOG || ee "Installing $NAME $VER failed"
