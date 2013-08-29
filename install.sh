@@ -102,6 +102,7 @@ has_dep()
 ## Install dependencies
 install_deps()
 {
+	e "Checking dependencies..."
 	for dep in ${DEPENDENCIES[@]}; do
 		check "$dep"
 		[ $? -eq 0 ] || install "$dep"
